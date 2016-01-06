@@ -13,7 +13,7 @@ URLS = [
 ]
 
 PHOTOS_DIR = 'screenshots'
-THRESHOLD = ''
+SAMPLES = 10
 
 
 def _clean_filename(name):
@@ -60,7 +60,7 @@ def rmsdiff(image1, image2):
 
 def directory_stdev(directory):
     """Calculates the average and standard deviation of images in a directory"""
-    files = os.listdir(directory)[-10:-1]
+    files = os.listdir(directory)[-SAMPLES:-1]
     rms = []
     for f1 in files:
         for f2 in files:
