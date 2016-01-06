@@ -2,65 +2,107 @@ import os, shutil
 from datetime import datetime
 from splinter import Browser
 
-import cv2
+from PIL import Image
+from PIL import ImageChops
+import math
 
 URLS = [
     'http://www.mc706.com',
     'http://www.google.com',
+    'http://www.reddit.com',
+    'http://www.msn.com',
 ]
 
 PHOTOS_DIR = 'screenshots'
+THRESHOLD = ''
 
 
 def _clean_filename(name):
     return name.strip('http://').strip('/')
 
 
-def _compare(image1, image2):
-    img1 = cv2.imread(image1)
-    img2 = cv2.imread(image2)
-    row1, cols1, channel1 = img1.shape
-    row2, cols2, channel2 = img2.shape
-    print 'image 1 rows:', row1
-    print 'image 2 rows:', row2
-    print 'image 1 cols:', cols1
-    print 'image 2 cols:', cols2
-    print 'image 1 channel:', channel1
-    print 'image 2 channel2:', channel2
-    if (row1 != row2) or (cols1 != cols2) or (channel1 != channel2):
-        print "two images are different"
-        match = False
-        return match
-    else:
-        mismatch = 0
-        for i in range(1, row1):
-            for j in range(1, cols1):
-                px1 = img1[i, j]
-                px2 = img2[i, j]
-                if (px1.sum() != px2.sum()):
-                    mismatch = mismatch + 1
-        print 'total mismatch is:', mismatch
-        if (mismatch == 0):
-            match = True
-        else:
-            match = False
-        return match
+def mean(data):
+    """Return the sample arithmetic mean of data."""
+    n = len(data)
+    if n < 1:
+        raise ValueError('mean requires at least one data point')
+    return sum(data) / n  # in Python 2 use sum(data)/float(n)
+
+
+def _ss(data):
+    """Return sum of square deviations of sequence data."""
+    c = mean(data)
+    ss = sum((x - c) ** 2 for x in data)
+    return ss
+
+
+def pstdev(data):
+    """Calculates the population standard deviation."""
+    n = len(data)
+    if n < 2:
+        raise ValueError('variance requires at least two data points')
+    ss = _ss(data)
+    pvar = ss / n  # the population variance
+    return pvar ** 0.5
+
+
+def rmsdiff(image1, image2):
+    "Calculate the root-mean-square difference between two images"
+    im1 = Image.open(image1)
+    im2 = Image.open(image2)
+
+    diff = ImageChops.difference(im1, im2)
+    h = diff.histogram()
+    sq = (value * (idx ** 2) for idx, value in enumerate(h))
+    sum_of_squares = sum(sq)
+    rms = math.sqrt(sum_of_squares / float(im1.size[0] * im1.size[1]))
+    return rms
+
+
+def directory_stdev(directory):
+    """Calculates the average and standard deviation of images in a directory"""
+    files = os.listdir(directory)[-10:-1]
+    rms = []
+    for f1 in files:
+        for f2 in files:
+            if f1 is not f2:
+                rms.append(rmsdiff(os.path.join(directory, f1), os.path.join(directory, f2)))
+    return mean(rms), pstdev(rms)
 
 
 def check_urls():
     created = []
+    changed = []
     today = str(datetime.now())
+    photos_dir = os.path.join(os.getcwd(), PHOTOS_DIR)
     with Browser() as browser:
         for url in URLS:
             browser.visit(url)
             screenshot = browser.screenshot('screenshot.png')
             if screenshot:
-                dest = os.path.join(os.getcwd(), PHOTOS_DIR, _clean_filename(url))
+                dest = os.path.join(photos_dir, _clean_filename(url))
                 if not os.path.exists(dest):
                     os.makedirs(dest)
                 name = os.path.join(dest, 'screenshot-{0}.png'.format(today))
                 created.append(name)
                 shutil.move(screenshot, name)
+    print "Calculating Differences"
+    for directory in os.listdir(photos_dir):
+        if os.path.isdir(os.path.join(photos_dir, directory)):
+            for image in created:
+                if directory in image:
+                    active = image
+            if active:
+                files = os.listdir(os.path.join(photos_dir, directory))
+                mean, std = directory_stdev(os.path.join(photos_dir, directory))
+                current = rmsdiff(os.path.join(photos_dir, directory, files[-1]), active)
+                if current < mean - std or current > mean + std:
+                    changed.append(directory)
+    if changed:
+        for change in changed:
+            print "{0} has changed by more than the average".format(change)
+    else:
+        print "None of the websites have changed"
 
 
 if __name__ == "__main__":
