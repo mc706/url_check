@@ -4,6 +4,8 @@ from splinter import Browser
 from PIL import Image
 from PIL import ImageChops
 from tqdm import tqdm
+from itertools import combinations
+    
 
 URLS = [
     'http://www.mc706.com',
@@ -62,10 +64,9 @@ def directory_stdev(directory):
     """Calculates the average and standard deviation of images in a directory"""
     files = os.listdir(directory)[-SAMPLES:-1]
     rms = []
-    for f1 in files:
-        for f2 in files:
-            if f1 is not f2:
-                rms.append(rmsdiff(os.path.join(directory, f1), os.path.join(directory, f2)))
+    pairs = combinations(files, 2)
+    for pair in pairs:
+        rms.append(rmsdiff(os.path.join(directory, pair[0]), os.path.join(directory, pair[1])))
     return mean(rms), pstdev(rms)
 
 
