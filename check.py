@@ -1,10 +1,9 @@
-import os, shutil
+import os, shutil, math
 from datetime import datetime
 from splinter import Browser
-
 from PIL import Image
 from PIL import ImageChops
-import math
+from tqdm import tqdm
 
 URLS = [
     'http://www.mc706.com',
@@ -75,8 +74,9 @@ def check_urls():
     changed = []
     today = str(datetime.now())
     photos_dir = os.path.join(os.getcwd(), PHOTOS_DIR)
+    print "Taking Screenshots"
     with Browser() as browser:
-        for url in URLS:
+        for url in tqdm(URLS):
             browser.visit(url)
             screenshot = browser.screenshot('screenshot.png')
             if screenshot:
@@ -87,7 +87,7 @@ def check_urls():
                 created.append(name)
                 shutil.move(screenshot, name)
     print "Calculating Differences"
-    for directory in os.listdir(photos_dir):
+    for directory in tqdm(os.listdir(photos_dir)):
         if os.path.isdir(os.path.join(photos_dir, directory)):
             for image in created:
                 if directory in image:
@@ -97,10 +97,10 @@ def check_urls():
                 mean, std = directory_stdev(os.path.join(photos_dir, directory))
                 current = rmsdiff(os.path.join(photos_dir, directory, files[-1]), active)
                 if current < mean - std or current > mean + std:
-                    changed.append(directory)
+                    changed.append((directory, current, mean, std))
     if changed:
         for change in changed:
-            print "{0} has changed by more than the average".format(change)
+            print "{0} has changed by more than the average, {1} !~ {2}+/-{3}".format(*change)
     else:
         print "None of the websites have changed"
 
