@@ -1,39 +1,24 @@
-import os, shutil, math
+import os, shutil
 from datetime import datetime
 from splinter import Browser
-from itertools import combinations
 
-from webmon.utils import _clean_filename, _rmsdiff
-
-URLS = [
-    'http://www.mc706.com',
-    'http://www.google.com',
-    'http://www.reddit.com',
-    'http://www.msn.com',
-]
-
-PHOTOS_DIR = 'screenshots'
-SAMPLES = 10
-
-
-def directory_stdev(directory):
-    """Calculates the average and standard deviation of images in a directory"""
-    files = os.listdir(directory)[-SAMPLES:-1]
-    rms = []
-    pairs = combinations(files, 2)
-    for pair in pairs:
-        rms.append(_rmsdiff(os.path.join(directory, pair[0]), os.path.join(directory, pair[1])))
-    return mean(rms), pstdev(rms)
+from webmon.utils import _clean_filename, _rmsdiff, _directory_stdev
+from webmon.configuration import get_urls, get_photos_directory
 
 
 def run():
+    urls = get_urls()
+    pdir = get_photos_directory()
     created = []
     changed = []
     today = str(datetime.now())
-    photos_dir = os.path.join(os.getcwd(), PHOTOS_DIR)
+    if os.path.isabs(pdir):
+        photos_dir = pdir
+    else:
+        photos_dir = os.path.join(os.getcwd(), pdir)
     print "Taking Screenshots"
     with Browser() as browser:
-        for url in tqdm(URLS):
+        for url in urls:
             browser.visit(url)
             screenshot = browser.screenshot('screenshot.png')
             if screenshot:
@@ -44,14 +29,14 @@ def run():
                 created.append(name)
                 shutil.move(screenshot, name)
     print "Calculating Differences"
-    for directory in tqdm(os.listdir(photos_dir)):
+    for directory in os.listdir(photos_dir):
         if os.path.isdir(os.path.join(photos_dir, directory)):
             for image in created:
                 if directory in image:
                     active = image
             if active:
                 files = os.listdir(os.path.join(photos_dir, directory))
-                mean, std = directory_stdev(os.path.join(photos_dir, directory))
+                mean, std = _directory_stdev(os.path.join(photos_dir, directory))
                 current = _rmsdiff(os.path.join(photos_dir, directory, files[-1]), active)
                 if current < mean - std or current > mean + std:
                     changed.append((directory, current, mean, std))

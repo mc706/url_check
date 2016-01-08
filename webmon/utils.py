@@ -1,10 +1,13 @@
 """
 Utilties files for webmon
 """
+import os
 import math
+from itertools import combinations
 from PIL import Image
 from PIL import ImageChops
-from tqdm import tqdm
+
+from webmon.configuration import get_samples
 
 
 def _clean_filename(name):
@@ -47,3 +50,14 @@ def _rmsdiff(image1, image2):
     sum_of_squares = sum(sq)
     rms = math.sqrt(sum_of_squares / float(im1.size[0] * im1.size[1]))
     return rms
+
+
+def _directory_stdev(directory):
+    """Calculates the average and standard deviation of images in a directory"""
+    samples = get_samples(directory)
+    files = os.listdir(directory)[-samples:-1]
+    rms = []
+    pairs = combinations(files, 2)
+    for pair in pairs:
+        rms.append(_rmsdiff(os.path.join(directory, pair[0]), os.path.join(directory, pair[1])))
+    return _mean(rms), _pstdev(rms)
