@@ -3,21 +3,15 @@ Fabric Commands Managing releases to Pypi
 """
 
 from fabric.api import task, local
+import shutil
 
-
-@task()
-def deploy_test():
-    """
-    deploys repository to testing environment
-    """
-    local('python setup.py register -r pypitest')
-    local('python setup.py sdist upload -r pypitest')
-
-
-@task()
-def deploy_prod():
+@task(default=True)
+def deploy():
     """
     deploys package to production pypi
     """
-    local('python setup.py register -r pypi')
-    local('python setup.py sdist upload -r pypi')
+    local('python setup.py bdist_wheel')
+    local('twine upload dist/*')
+    shutil.rmtree('build')
+    shutil.rmtree('dist')
+    shutil.rmtree('webmon.egg-info')
