@@ -9,7 +9,6 @@ def update_readme_badge(version):
     minus_header = "\n".join(get_readme_file().split('\n')[2:])
     with open(README_FILE, 'w') as readme:
         readme.write("# {0}\n".format(PROJECT_NAME))
-        readme.write('---\n')
         readme.write("![version](https://img.shields.io/badge/version-{0}-blue.svg)\n".format(version))
         readme.write(minus_header)
     return True
