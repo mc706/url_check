@@ -1,5 +1,6 @@
 # webmon
 ---
+![version](https://img.shields.io/badge/version-0.0.4-blue.svg)
 ![version](https://img.shields.io/badge/version-0.0.3-blue.svg)
 [![Stories in Ready](https://badge.waffle.io/mc706/webmon.png?label=ready&title=Ready)](https://waffle.io/mc706/webmon)
 [![PyPi version](https://pypip.in/v/webmon/badge.png)](https://crate.io/packages/webmon/)
