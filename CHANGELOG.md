@@ -6,8 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [KeepAChan
 ---
 
 ### New
+* Added .venv for auto virtualenv 
 
 ### Changes
+* Split out functions into utils
+* Updated README fabric commands
 
 ### Fixes
 
