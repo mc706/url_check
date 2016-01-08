@@ -1,10 +1,7 @@
 # webmon
----
 ![version](https://img.shields.io/badge/version-0.0.4-blue.svg)
-![version](https://img.shields.io/badge/version-0.0.3-blue.svg)
 [![Stories in Ready](https://badge.waffle.io/mc706/webmon.png?label=ready&title=Ready)](https://waffle.io/mc706/webmon)
-[![PyPi version](https://pypip.in/v/webmon/badge.png)](https://crate.io/packages/webmon/)
-[![PyPi downloads](https://pypip.in/d/webmon/badge.png)](https://crate.io/packages/webmon/)
+[![PyPI version](https://badge.fury.io/py/webmon.svg)](https://badge.fury.io/py/webmon)
 
 A tool that allows you to point to a number of different URLS and have it take screenshots and listen for differences 
 over time.
