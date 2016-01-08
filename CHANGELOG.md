@@ -5,12 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [KeepAChan
 ## [Unreleased]
 ---
 
-### New
-
 ### Changes
 * Updated fabric pypi command
-
-### Fixes
 
 
 ## [[0.0.5](https://github.com/mc706/webmon/releases/tag/v0.0.5)] - (2016-01-07)
