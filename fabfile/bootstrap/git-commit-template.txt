@@ -1,0 +1,9 @@
+
+#Put a short description line then details below
+#Details
+
+#Issue Number
+Fixes #
+
+#Time Spent (float in terms of hours)
+Time: []
