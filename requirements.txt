@@ -1,6 +1,11 @@
+click==6.2
 configparser==3.3.0.post2
 cv2==1.0
+ecdsa==0.13
+Fabric==1.10.2
+paramiko==1.16.0
 Pillow==3.1.0
+pycrypto==2.6.1
 selenium==2.48.0
 splinter==0.7.3
 tqdm==3.4.0

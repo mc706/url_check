@@ -70,7 +70,7 @@ def directory_stdev(directory):
     return mean(rms), pstdev(rms)
 
 
-def check_urls():
+def run():
     created = []
     changed = []
     today = str(datetime.now())
@@ -105,6 +105,3 @@ def check_urls():
     else:
         print "None of the websites have changed"
 
-
-if __name__ == "__main__":
-    check_urls()

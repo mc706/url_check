@@ -6,6 +6,7 @@ from fabric.api import local, task
 
 import release
 from bootstrap import bootstrap
+import pypi
 
 
 # === Freeze ===
