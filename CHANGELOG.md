@@ -12,6 +12,13 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [KeepAChan
 ### Fixes
 
 
+## [[0.0.7](https://github.com/mc706/webmon/releases/tag/v0.0.7)] - (2016-01-07)
+---
+
+### New
+* Added pypi.clean task
+
+
 ## [[0.0.6](https://github.com/mc706/webmon/releases/tag/v0.0.6)] - (2016-01-07)
 ---
 
