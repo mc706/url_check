@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [KeepAChan
 ### New
 
 ### Changes
+* Updated fabric pypi command
 
 ### Fixes
 

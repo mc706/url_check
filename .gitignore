@@ -146,7 +146,7 @@ target/
 [Ss]cripts
 pyvenv.cfg
 pip-selfcheck.json
-
+*.pyc
 
 ## User Defined
 !screenshots
