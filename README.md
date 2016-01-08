@@ -1,5 +1,6 @@
-# janet_api
+# webmon
 ---
+![version](https://img.shields.io/badge/version-0.0.2-blue.svg)
 ![version](https://img.shields.io/badge/version-0.0.1-blue.svg)
 [![Stories in Ready](https://badge.waffle.io/mc706/webmon.png?label=ready&title=Ready)](https://waffle.io/mc706/webmon)
 
