@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import re
 
 ## Get the release number
@@ -22,7 +22,7 @@ setup(
     author='Ryan McDevitt',
     author_email='mcdevitt.ryan@gmail.com',
     license='MIT License',
-    packages=['webmon'],
+    packages=find_packages(exclude=['fabfile*', 'docs', 'tests*']),
     include_package_data=True,
     description='Monitor websites for visual changes',
     download_url='https://github.com/mc706/webmon/tarball' + release,
@@ -48,8 +48,9 @@ setup(
         'splinter',
         'colorama',
     ],
-    entry_points='''
-        [console_scripts]
-        webmon=webmon.main:run
-    '''
+    entry_points={
+        'console_scripts': [
+            'webmon=webmon.main:run',
+        ]
+    }
 )
