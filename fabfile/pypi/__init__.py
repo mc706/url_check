@@ -5,6 +5,7 @@ Fabric Commands Managing releases to Pypi
 from fabric.api import task, local
 import shutil
 
+
 @task(default=True)
 def deploy():
     """
@@ -12,6 +13,15 @@ def deploy():
     """
     local('python setup.py bdist_wheel')
     local('twine upload dist/*')
+    clean()
+
+
+@task()
+def clean():
+    """
+    removes build artifacts
+    :return:
+    """
     shutil.rmtree('build')
     shutil.rmtree('dist')
     shutil.rmtree('webmon.egg-info')
