@@ -1,7 +1,7 @@
 click==6.2
 configparser==3.3.0.post2
 cv2==1.0
-ecdsa==0.13
+ecdsa==0.13.3
 Fabric==1.10.2
 gitdb==0.6.4
 gitflow==0.5.1
