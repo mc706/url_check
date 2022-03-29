@@ -6,7 +6,7 @@ Fabric==1.10.2
 gitdb==0.6.4
 gitflow==0.5.1
 GitPython==1.0.1
-paramiko==1.16.0
+paramiko==2.10.1
 Pillow==3.1.0
 pycrypto==2.6.1
 selenium==2.48.0
